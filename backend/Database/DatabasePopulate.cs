@@ -5,12 +5,10 @@ namespace backend.Database;
 public class DatabasePopulate
 {
     private readonly string _connectionString;
-    private readonly ILogger<DatabasePopulate> _logger;
 
-    public DatabasePopulate(string connectionString, ILogger<DatabasePopulate> logger)
+    public DatabasePopulate(string connectionString)
     {
         _connectionString = connectionString;
-        _logger = logger;
     }
 
     public void Populating()
@@ -18,8 +16,13 @@ public class DatabasePopulate
         try
         {
             using var connection = new MySqlConnection(_connectionString);
-
             connection.Open();
+
+            if (IsTablePopulate(connection, "categories") && IsTablePopulate(connection, "suppliers"))
+            {
+                Console.WriteLine("Os dados iniciais já foram populados.");
+                return;
+            }
 
             var insertCategories = @"
                     INSERT INTO categories (name, description, date_added) VALUES
@@ -27,7 +30,7 @@ public class DatabasePopulate
                     ('Móveis', 'Mesas, cadeiras e armários', NOW()),
                     ('Alimentos', 'Produtos alimentícios e bebidas', NOW()),
                     ('Roupas', 'Vestuário em geral', NOW()),
-                    ('eletrodomésticos', 'Geladeiras, fogões e máquinas de lavar', NOW())
+                    ('Eletrodomésticos', 'Geladeiras, fogões e máquinas de lavar', NOW())
                     ON DUPLICATE KEY UPDATE name = name;";
 
             var insertSuppliers = @"
@@ -38,28 +41,43 @@ public class DatabasePopulate
                     ON DUPLICATE KEY UPDATE name = name;";
 
             ExecuteCommand(connection, insertCategories);
-
             ExecuteCommand(connection, insertSuppliers);
 
-            _logger.LogInformation("Dados iniciais populados com sucesso.");
+            Console.WriteLine("Dados iniciais populados com sucesso.");
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Houve um erro ao inserir os dados iniciais: {ex.Message}");
+            Console.WriteLine($"Houve um erro ao inserir os dados iniciais: {ex.Message}");
             throw;
         }
     }
 
-    private void ExecuteCommand(MySqlConnection connection, string sql)
+    private static bool IsTablePopulate(MySqlConnection connection, string tableName)
+    {
+        var query = $"SELECT COUNT(*) FROM {tableName}";
+        try
+        {
+            using var command = new MySqlCommand(query, connection);
+
+            return (long)command.ExecuteScalar() > 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Houve um erro ao verificar se a tabela '{tableName}' está preenchida: {ex.Message}");
+            throw;
+        }
+    }
+
+    private static void ExecuteCommand(MySqlConnection connection, string sql)
     {
         try
         {
             using var command = new MySqlCommand(sql, connection);
-
             command.ExecuteNonQuery();
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
-            _logger.LogError($"Houve um erro ao executar o comando SQL: {ex.Message}");
+            Console.WriteLine($"Houve um erro ao executar o comando SQL: {ex.Message}");
             throw;
         }
     }

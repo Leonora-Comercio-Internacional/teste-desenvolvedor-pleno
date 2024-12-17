@@ -1,4 +1,6 @@
 using backend.Database;
+using backend.Interfaces;
+using backend.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,29 +12,20 @@ builder.Services.AddSwaggerGen();
 
 builder.Configuration.AddJsonFile("appsettings.json");
 
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-
-var loggerFactory = LoggerFactory.Create(loggingBuilder =>
-{
-    loggingBuilder.AddConsole();
-});
-
-var logger = loggerFactory.CreateLogger("Program");
-
-logger.LogInformation("Iniciando configuração do banco de dados...");
-
 var mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
+builder.Services.AddScoped<IProductRepository>(provider => new ProductRepository(mySqlConnection));
+
+
 #region CreateAndInitializeDatabase
-var databaseCreator = new DatabaseCreator(mySqlConnection, loggerFactory.CreateLogger<DatabaseCreator>());
+var databaseCreator = new DatabaseCreator(mySqlConnection);
 
 databaseCreator.CreateDatabase();
 databaseCreator.InitializeTables();
 #endregion
 
 #region PopulateDatabase
-var databaseSeeder = new DatabasePopulate(mySqlConnection, loggerFactory.CreateLogger<DatabasePopulate>());
+var databaseSeeder = new DatabasePopulate(mySqlConnection);
 
 databaseSeeder.Populating();
 #endregion
