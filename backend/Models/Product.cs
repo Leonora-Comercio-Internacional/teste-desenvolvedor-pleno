@@ -8,5 +8,5 @@ public class Product
     public string? Description { get; set; }
     public bool IsDeleted { get; set; } 
     public int CategoryId { get; set; }
-    public DateTime? DateAdded { get; set; }
+    public DateTime DateAdded { get; set; }
 }

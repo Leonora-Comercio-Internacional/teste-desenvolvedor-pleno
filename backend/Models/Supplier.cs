@@ -7,5 +7,5 @@ public class Supplier
     public string? CNPJ { get; set; }
     public string? Telephone { get; set; }
     public string? Address { get; set; }
-    public DateTime? DateAdded { get; set; }
+    public DateTime DateAdded { get; set; }
 }
