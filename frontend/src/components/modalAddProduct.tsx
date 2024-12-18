@@ -13,6 +13,18 @@ export function ModalAddProduct({ isModalOpen, setIsModalOpen }: ModalAddProduct
 
   const onSubmit = async (data: ProductRequest) => {
     try {
+      if (data.supplierIds) {
+        data.supplierIds = [parseInt(data.supplierIds.toString())];
+      }
+
+      if (data.categoryId) {
+        data.categoryId = parseInt(data.categoryId.toString());
+      }
+
+      if (data.price) {
+        data.price = parseFloat(data.price.toString());
+      }
+
       await api.post('Product/AddProduct', data)
 
       setIsModalOpen(false)
@@ -50,7 +62,7 @@ export function ModalAddProduct({ isModalOpen, setIsModalOpen }: ModalAddProduct
           {formState.errors.categoryId && <span>{formState.errors.categoryId.message}</span>}
 
           <label>Fornecedores</label>
-          <select {...register('supplierId')} className="form-control">
+          <select {...register('supplierIds')} className="form-control">
             <option value=""></option>
             <option value="1">Fornecedor A</option>
             <option value="2">Fornecedor B</option>

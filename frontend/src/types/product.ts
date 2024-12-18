@@ -14,5 +14,5 @@ export interface ProductRequest {
   price: number;
   description: string | null;
   categoryId: number;
-  supplierId: Array<number>;
+  supplierIds: Array<number>;
 }

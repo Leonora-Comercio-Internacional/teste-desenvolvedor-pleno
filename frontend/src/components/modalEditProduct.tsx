@@ -25,7 +25,7 @@ export function ModalEditProduct({ product, isModalOpen, setIsModalOpen }: Modal
       setValue("price", product.price);
       setValue("description", product.description);
       setValue("categoryId", product.categoryId);
-      setValue("supplierId", product.supplierId);
+      setValue("supplierIds", product.supplierId);
     } else {
       reset();
     }
@@ -35,8 +35,16 @@ export function ModalEditProduct({ product, isModalOpen, setIsModalOpen }: Modal
     try {
       const id = product?.id;
 
-      if (data.supplierId) {
-        data.supplierId = [parseInt(data.supplierId.toString())];
+      if (data.supplierIds) {
+        data.supplierIds = [parseInt(data.supplierIds.toString())];
+      }
+
+      if (data.categoryId) {
+        data.categoryId = parseInt(data.categoryId.toString());
+      }
+
+      if (data.price) {
+        data.price = parseFloat(data.price.toString());
       }
 
       await api.put(`Product/UpdateProductById/${id}`, data);
@@ -76,13 +84,12 @@ export function ModalEditProduct({ product, isModalOpen, setIsModalOpen }: Modal
           {formState.errors.categoryId && <span>{formState.errors.categoryId.message}</span>}
 
           <label>Fornecedores</label>
-          <select {...register('supplierId')} className="form-control">
+          <select {...register('supplierIds')} className="form-control" multiple data-live-search="true">
             <option value=""></option>
             <option value="1">Fornecedor A</option>
             <option value="2">Fornecedor B</option>
             <option value="3">Fornecedor C</option>
           </select>
-
         </form>
       </ModalBody>
       <ModalFooter>
