@@ -25,6 +25,7 @@ export function ModalEditProduct({ product, isModalOpen, setIsModalOpen }: Modal
       setValue("price", product.price);
       setValue("description", product.description);
       setValue("categoryId", product.categoryId);
+      setValue("supplierId", product.supplierId);
     } else {
       reset();
     }
@@ -34,9 +35,15 @@ export function ModalEditProduct({ product, isModalOpen, setIsModalOpen }: Modal
     try {
       const id = product?.id;
 
-      await api.put(`/Product/${id}`, data);
+      if (data.supplierId) {
+        data.supplierId = [parseInt(data.supplierId.toString())];
+      }
+
+      await api.put(`/UpdateProductById/${id}`, data);
 
       setIsModalOpen(false)
+
+      window.location.reload();
     } catch (error) {
       console.log(error)
     }
@@ -67,6 +74,14 @@ export function ModalEditProduct({ product, isModalOpen, setIsModalOpen }: Modal
             <option value="5">Eletrodomésticos</option>
           </select>
           {formState.errors.categoryId && <span>{formState.errors.categoryId.message}</span>}
+
+          <label>Fornecedores</label>
+          <select {...register('supplierId')} className="form-control">
+            <option value=""></option>
+            <option value="1">Fornecedor A</option>
+            <option value="2">Fornecedor B</option>
+            <option value="3">Fornecedor C</option>
+          </select>
 
         </form>
       </ModalBody>

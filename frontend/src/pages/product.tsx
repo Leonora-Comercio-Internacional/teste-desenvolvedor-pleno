@@ -18,6 +18,12 @@ enum Category {
   Eletrodomésticos = 5,
 }
 
+const Supplier = {
+  1: "Fornecedor A",
+  2: "Fornecedor B",
+  3: "Fornecedor C",
+};
+
 export function Product() {
   const [products, setProducts] = useState<Product[]>([])
   const [activeModal, setActiveModal] = useState<"add" | "edit" | "delete" | null>(null);
@@ -26,7 +32,7 @@ export function Product() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get<Product[]>('/Product')
+        const response = await api.get<Product[]>('/GetAllProduct')
         setProducts(response.data)
       } catch (error) {
         console.log(error)
@@ -38,7 +44,7 @@ export function Product() {
 
   const deleteProduct = async (id: number) => {
     try {
-      await api.delete(`/Product/${id}`)
+      await api.delete(`/DeleteProductById/${id}`)
       setProducts(products.filter((product) => product.id !== id))
     } catch (error) {
       console.log(error)
@@ -71,6 +77,7 @@ export function Product() {
                   <th>Preço</th>
                   <th>Descrição</th>
                   <th>Categoria</th>
+                  <th>Fornecedor(es)</th>
                   <th>Ações</th>
                 </tr>
               </thead>
@@ -82,6 +89,14 @@ export function Product() {
                     <td>{formatNumberCurrency(product.price)}</td>
                     <td>{product.description}</td>
                     <td>{Category[product.categoryId]}</td>
+                    <td>{Array.isArray(product.supplierId) && product.supplierId.length > 0
+                      ? product.supplierId
+                        .map((supplierId) => {
+                          const supplierName = Supplier[supplierId as unknown as keyof typeof Supplier];
+                          return supplierName || `Unknown Supplier (ID: ${supplierId})`;
+                        })
+                        .join(", ")
+                      : "Sem Fornecedor"}</td>
                     <td>
                       <button className="btn btn-primary btn-sm me-2" onClick={() => {
                         setSelectedProduct(product);

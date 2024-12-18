@@ -13,9 +13,11 @@ export function ModalAddProduct({ isModalOpen, setIsModalOpen }: ModalAddProduct
 
   const onSubmit = async (data: ProductRequest) => {
     try {
-      await api.post('/Product', data)
+      await api.post('/AddProduct', data)
 
       setIsModalOpen(false)
+
+      window.location.reload();
     } catch (error) {
       console.log(error)
     }
@@ -46,6 +48,14 @@ export function ModalAddProduct({ isModalOpen, setIsModalOpen }: ModalAddProduct
             <option value="5">Eletrodomésticos</option>
           </select>
           {formState.errors.categoryId && <span>{formState.errors.categoryId.message}</span>}
+
+          <label>Fornecedores</label>
+          <select {...register('supplierId')} className="form-control">
+            <option value=""></option>
+            <option value="1">Fornecedor A</option>
+            <option value="2">Fornecedor B</option>
+            <option value="3">Fornecedor C</option>
+          </select>
 
         </form>
       </ModalBody>
