@@ -13,13 +13,13 @@ export function ModalAddProduct({ isModalOpen, setIsModalOpen }: ModalAddProduct
 
   const onSubmit = async (data: ProductRequest) => {
     try {
-      await api.post('/AddProduct', data)
+      await api.post('Product/AddProduct', data)
 
       setIsModalOpen(false)
 
       window.location.reload();
-    } catch (error) {
-      console.log(error)
+    } catch {
+      alert("Houve um erro ao adicionar produto");
     }
   }
 

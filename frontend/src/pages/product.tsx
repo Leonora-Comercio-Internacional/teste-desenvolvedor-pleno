@@ -9,6 +9,7 @@ import { formatNumberCurrency } from "../utils/format"
 import { ModalEditProduct } from "../components/modalEditProduct"
 import { ModalDeleteProduct } from "../components/modalDeleteProduct"
 import { api } from "../lib/axios"
+import { useNavigate } from "react-router-dom"
 
 enum Category {
   Eletrônicos = 1,
@@ -29,13 +30,15 @@ export function Product() {
   const [activeModal, setActiveModal] = useState<"add" | "edit" | "delete" | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get<Product[]>('/GetAllProduct')
+        const response = await api.get<Product[]>('Product/GetAllProduct')
         setProducts(response.data)
-      } catch (error) {
-        console.log(error)
+      } catch {
+        alert("Houve um erro ao buscar produtos");
       }
     }
 
@@ -44,18 +47,32 @@ export function Product() {
 
   const deleteProduct = async (id: number) => {
     try {
-      await api.delete(`/DeleteProductById/${id}`)
+      await api.delete(`Product/DeleteProductById/${id}`)
       setProducts(products.filter((product) => product.id !== id))
-    } catch (error) {
-      console.log(error)
+    } catch {
+      alert("Houve um erro ao excluir produto");
     }
   }
 
+  const logout = () => {
+    localStorage.removeItem("authToken");
+
+    navigate('/auth/signIn');
+  }
+
   return (
-    <div className="bg-dark text-white min-vh-100 d-flex flex-column">
+    <div className="container-fluid bg-dark text-white min-vh-100 d-flex flex-column">
       <header className="text-center py-4">
+        <nav className="d-flex justify-content-end">
+          <button
+            onClick={logout}
+            className="btn btn-danger mb-2"
+          >
+            Sair
+          </button>
+        </nav>
         <img src={imgLogo} alt="Logo" className="logo mb-3" />
-        <h1 className="fw-bold">Grupo Leonora</h1>
+
       </header>
 
       <div className="container-fluid flex-grow-1 d-flex flex-column">

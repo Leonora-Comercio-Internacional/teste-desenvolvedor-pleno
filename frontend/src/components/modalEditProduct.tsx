@@ -39,13 +39,13 @@ export function ModalEditProduct({ product, isModalOpen, setIsModalOpen }: Modal
         data.supplierId = [parseInt(data.supplierId.toString())];
       }
 
-      await api.put(`/UpdateProductById/${id}`, data);
+      await api.put(`Product/UpdateProductById/${id}`, data);
 
       setIsModalOpen(false)
 
       window.location.reload();
-    } catch (error) {
-      console.log(error)
+    } catch {
+      alert("Houve um erro ao editar produto");
     }
   }
 
