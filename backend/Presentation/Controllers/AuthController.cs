@@ -1,13 +1,13 @@
-﻿using backend.DTOs;
-using backend.Interfaces;
-using backend.Models;
+﻿using Backend.Application.DTOs;
+using Backend.Domain.Interfaces;
+using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace backend.Controllers;
+namespace Backend.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

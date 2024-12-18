@@ -1,7 +1,7 @@
-using backend.Repositories;
-using backend.Interfaces;
-using backend.Database;
-using backend.Utils;
+using Backend.Domain.Interfaces;
+using Backend.Repositories;
+using Backend.Database;
+using Backend.Utils;
 using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +16,7 @@ builder.Services.AddApiSwagger();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Configuration.AddJsonFile("appsettings.json");
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 var mySqlConnection = builder.Configuration["ConnectionStrings:DefaultConnection"] = Environment.GetEnvironmentVariable("DefaultConnection");
 

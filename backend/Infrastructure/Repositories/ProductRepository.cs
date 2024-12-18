@@ -1,10 +1,10 @@
 ﻿using MySql.Data.MySqlClient;
-using backend.Interfaces;
-using backend.Models;
+using Backend.Models;
 using System.Data;
-using backend.DTOs;
+using Backend.Application.DTOs;
+using Backend.Domain.Interfaces;
 
-namespace backend.Repositories;
+namespace Backend.Repositories;
 
 public class ProductRepository : IProductRepository
 {

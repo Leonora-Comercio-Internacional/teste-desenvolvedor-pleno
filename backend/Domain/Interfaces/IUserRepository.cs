@@ -1,7 +1,7 @@
-﻿using backend.DTOs;
-using backend.Models;
+﻿using Backend.Application.DTOs;
+using Backend.Models;
 
-namespace backend.Interfaces;
+namespace Backend.Domain.Interfaces;
 
 public interface IUserRepository
 {

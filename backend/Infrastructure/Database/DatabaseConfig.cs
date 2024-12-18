@@ -1,4 +1,4 @@
-﻿namespace backend.Database;
+﻿namespace Backend.Database;
 
 public class DatabaseConfig
 {

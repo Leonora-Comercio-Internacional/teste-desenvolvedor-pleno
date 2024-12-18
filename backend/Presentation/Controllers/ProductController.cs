@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using backend.Interfaces;
-using backend.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using Backend.Application.DTOs;
+using Backend.Domain.Interfaces;
 
-namespace backend.Controllers;
+namespace Backend.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

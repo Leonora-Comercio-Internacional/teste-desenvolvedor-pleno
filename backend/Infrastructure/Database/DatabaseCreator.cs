@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 
-namespace backend.Database;
+namespace Backend.Database;
 
 public class DatabaseCreator
 {

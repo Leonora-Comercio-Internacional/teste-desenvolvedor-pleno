@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 
-namespace backend.Database;
+namespace Backend.Database;
 
 public class DatabasePopulate
 {
@@ -26,20 +26,22 @@ public class DatabasePopulate
 
             var insertCategories = @"
                     INSERT INTO categories (name, description, date_added) VALUES
-                    ('Eletrônicos', 'Produtos como celulares, video games, TVs e computadores', NOW()),
-                    ('Móveis', 'Mesas, cadeiras e armários', NOW()),
-                    ('Alimentos', 'Produtos alimentícios e bebidas', NOW()),
-                    ('Roupas', 'Vestuário em geral', NOW()),
-                    ('Eletrodomésticos', 'Geladeiras, fogões e máquinas de lavar', NOW())
+                    ('Eletrônicos', 'Aparelhos como smartphones, notebooks, tablets e câmeras digitais', NOW()),
+                    ('Móveis', 'Móveis para casa e escritório, como sofás, mesas, cadeiras e estantes', NOW()),
+                    ('Alimentos', 'Produtos como cereais, laticínios, bebidas e alimentos processados', NOW()),
+                    ('Roupas', 'Vestuário masculino, feminino e infantil, incluindo acessórios', NOW()),
+                    ('Eletrodomésticos', 'Itens como geladeiras, aspiradores, fornos de micro-ondas e lavadoras', NOW())
                     ON DUPLICATE KEY UPDATE name = name;";
 
             var insertSuppliers = @"
                     INSERT INTO suppliers (name, cnpj, telephone, address, date_added) VALUES
-                    ('Fornecedor A', '12.345.678/0001-90', '1234-5678', 'Rua Exemplo, 123', NOW()),
-                    ('Fornecedor B', '98.765.432/0001-21', '9876-5432', 'Avenida Exemplo, 456', NOW()),
-                    ('Fornecedor C', '55.444.333/0001-12', '5544-3321', 'Praça Exemplo, 789', NOW())
+                    ('Comercial Santos LTDA', '23.456.789/0001-12', '(11) 3124-5678', 'Rua das Flores, 145, São Paulo - SP', NOW()),
+                    ('Distribuidora Nova Era', '87.654.321/0001-65', '(21) 9876-5432', 'Avenida Atlântica, 890, Rio de Janeiro - RJ', NOW()),
+                    ('Alimentos União S.A.', '45.123.987/0001-34', '(31) 9987-1122', 'Praça Central, 255, Belo Horizonte - MG', NOW()),
+                    ('Móveis e Design LTDA', '56.789.123/0001-44', '(41) 3322-5566', 'Alameda das Árvores, 678, Curitiba - PR', NOW()),
+                    ('Tech Solutions Inc.', '12.345.678/0001-99', '(51) 3344-7788', 'Rua da Inovação, 321, Porto Alegre - RS', NOW())
                     ON DUPLICATE KEY UPDATE name = name;";
-            
+
             var password = BCrypt.Net.BCrypt.HashPassword("leonora");
 
             var insertUser = $@"

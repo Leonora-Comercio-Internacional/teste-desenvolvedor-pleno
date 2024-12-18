@@ -1,6 +1,6 @@
-﻿using backend.DTOs;
+﻿using Backend.Application.DTOs;
 
-namespace backend.Interfaces;
+namespace Backend.Domain.Interfaces;
 
 public interface IProductRepository
 {

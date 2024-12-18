@@ -1,11 +1,11 @@
-﻿using backend.Models;
+﻿using Backend.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
-namespace backend.Utils;
+namespace Backend.Utils;
 
 public static class ServicesExtension
 {
