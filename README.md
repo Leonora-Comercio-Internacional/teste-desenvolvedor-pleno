@@ -61,8 +61,6 @@ Para isso, modifique o arquivo axios.tsx localizado na pasta lib do frontend, aj
 
 ### Backend
 
-Deixei configurado no arquivo launchSettings.json para o backend executar na porta 5006, com isso a rota no frontend está direcionada para essa porta, se por ventura houver a troca será necessário alterar no frontend também que fica localizado na pasta lib no arquivo axios.tsx
-
 1. Clone o repositório
 
 ```bash
