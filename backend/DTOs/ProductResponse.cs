@@ -8,6 +8,7 @@
         public string? Description { get; set; }
         public bool IsDeleted { get; set; }
         public int CategoryId { get; set; }
+        public List<int> SupplierId { get; set; } = new List<int>();
         public DateTime DateAdded { get; set; }
     }
 }
