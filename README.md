@@ -6,6 +6,52 @@ Este projeto é uma aplicação para gestão de produtos, desenvolvida como part
 
 ---
 
+## Tecnologias Utilizadas
+### Backend
+- C#
+- .NET Core / .NET 6+
+- ADO.NET: Para acesso ao banco de dados.
+- MySQL: Banco de dados relacional utilizado.
+- JWT: Para autenticação.
+- Swashbuckle (Swagger): Para documentação da API.
+- DotNetEnv: Para gerenciamento de variáveis de ambiente.
+- BCrypt: Para hashing de senhas.
+
+### Frontend
+- React: Biblioteca JavaScript para construção da interface.
+- TypeScript: Superset de JavaScript que adiciona tipagem estática.
+- Axios: Cliente HTTP para realizar requisições à API.
+- React Hook Form: Biblioteca para gerenciamento de formulários.
+- Zod: Biblioteca para validações de inputs.
+- React Router DOM: Para roteamento na aplicação.
+- Bootstrap: Framework CSS para estilização.
+
+---
+
+## Funcionalidades
+
+### Backend
+1. CRUD de Produtos:
+   - Criação, leitura, atualização e exclusão lógica de produtos.
+2. Relacionamento entre Tabelas:
+   - Produtos associados a categorias e fornecedores.
+3. Autenticação:
+   - Proteção dos endpoints da API com JWT.
+4. Banco de Dados:
+   - Utilização de MySQL como banco de dados relacional.
+
+### Frontend
+1. Listagem de Produtos:
+   - Exibição dos produtos cadastrados em uma tabela responsiva.
+2. Cadastro e Edição de Produtos:
+   - Formulário para criar e editar produtos.
+3. Validações:
+   - Validação básica dos campos no frontend.
+4. Exclusão de Produtos:
+   - Possibilidade de excluir um produto da listagem.
+
+---
+
 ## Como configurar e Executar o Projeto
 
 ### Backend
@@ -40,6 +86,15 @@ dotnet restore
 ```bash
 dotnet run
 ```
+
+Ao rodar o projeto pela primeira vez, o banco de dados será criado e populado com alguns dados nas tabelas categories e suppliers. Além disso, um usuário será adicionado na tabela users com as seguintes credenciais:
+
+- Username: Grupo Leonora
+- Senha: leonora
+
+Também é possível adicionar novos usuários.
+
+---
 
 ### Frontend
 
