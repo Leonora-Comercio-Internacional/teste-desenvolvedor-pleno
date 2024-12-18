@@ -247,7 +247,7 @@ public class ProductRepository : IProductRepository
                     }
                 }
 
-                var newSupplierIds = product.SupplierId ?? new List<int>();
+                var newSupplierIds = product.SupplierIds ?? new List<int>();
                 var suppliersToAdd = newSupplierIds.Except(existingSupplierIds);
                 var suppliersToRemove = existingSupplierIds.Except(newSupplierIds);
 
