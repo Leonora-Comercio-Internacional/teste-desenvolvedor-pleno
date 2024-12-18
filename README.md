@@ -54,7 +54,14 @@ Este projeto é uma aplicação para gestão de produtos, desenvolvida como part
 
 ## Como configurar e Executar o Projeto
 
+### Configuração de Portas
+O backend está configurado para executar na porta 5006, conforme especificado no arquivo launchSettings.json. A rota no frontend está direcionada para essa porta. Caso haja a necessidade de alterar a porta do backend, será necessário atualizar a configuração no frontend também.
+
+Para isso, modifique o arquivo axios.tsx localizado na pasta lib do frontend, ajustando a URL base para a nova porta.
+
 ### Backend
+
+Deixei configurado no arquivo launchSettings.json para o backend executar na porta 5006, com isso a rota no frontend está direcionada para essa porta, se por ventura houver a troca será necessário alterar no frontend também que fica localizado na pasta lib no arquivo axios.tsx
 
 1. Clone o repositório
 
