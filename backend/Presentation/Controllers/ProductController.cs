@@ -16,6 +16,7 @@ public class ProductController : ControllerBase
     {
         _productRepository = productRepository;
     }
+
     /// <summary>
     /// Retrieve all products from the database.
     /// </summary>
@@ -23,9 +24,17 @@ public class ProductController : ControllerBase
     [HttpGet("GetAllProduct")]
     public async Task<IActionResult> GetAllProduct()
     {
-        var products = await _productRepository.GetAllProductAsync();
+        try
+        {
+            var products = await _productRepository.GetAllProductAsync();
 
-        return Ok(products);
+            return Ok(products);
+
+        }
+        catch
+        {
+            return StatusCode(500, new { message = "Houve um erro ao buscar os produtos." });
+        }
     }
 
     /// <summary>
@@ -36,14 +45,26 @@ public class ProductController : ControllerBase
     [HttpGet("GetProductById/{id}")]
     public async Task<IActionResult> GetProductById(int id)
     {
-        var product = await _productRepository.GetProductByIdAsync(id);
-
-        if (product == null)
+        if (id <= 0)
         {
-            return NotFound();
+            return BadRequest(new { message = "ID inválido." });
+        }
+        try
+        {
+            var product = await _productRepository.GetProductByIdAsync(id);
+
+            if (product == null)
+            {
+                return NotFound(new { message = "Produto não encontrado." });
+            }
+
+            return Ok(product);
+        }
+        catch
+        {
+            return StatusCode(500, new { message = $"Houve um erro ao buscar o produto com id: {id}" });
         }
 
-        return Ok(product);
     }
 
     /// <summary>
@@ -73,10 +94,9 @@ public class ProductController : ControllerBase
                 new { id = result },
                 new { id = result, message = "Produto criado com sucesso." });
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Erro ao adicionar produto: {ex.Message}");
-            return StatusCode(500, new { message = "Ocorreu um erro no servidor." });
+            return StatusCode(500, new { message = "Houve um erro ao adicionar o produto." });
         }
     }
 
@@ -89,21 +109,29 @@ public class ProductController : ControllerBase
     [HttpPut("UpdateProductById/{id}")]
     public async Task<IActionResult> UpdateProductById(int id, [FromBody] ProductUpdate product)
     {
-        if (product == null)
+        if (product == null || id <= 0)
         {
             return BadRequest(new { message = "Os dados informados são inválidos." });
         }
 
-        var productExists = await _productRepository.GetProductByIdAsync(id);
-
-        if (productExists == null)
+        try
         {
-            return NotFound(new { message = "O produto informado não foi encontrado." });
+            var productExists = await _productRepository.GetProductByIdAsync(id);
+
+            if (productExists == null)
+            {
+                return NotFound(new { message = "O produto informado não foi encontrado." });
+            }
+
+            await _productRepository.UpdateProductAsync(id, product);
+
+            return NoContent();
         }
+        catch
+        {
 
-        await _productRepository.UpdateProductAsync(id, product);
-
-        return NoContent();
+            return StatusCode(500, new { message = "Houve um erro ao atualizar o produto." });
+        }
     }
 
     /// <summary>
@@ -114,15 +142,28 @@ public class ProductController : ControllerBase
     [HttpDelete("DeleteProductById/{id}")]
     public async Task<IActionResult> DeleteProductById(int id)
     {
-        var existingProduct = await _productRepository.GetProductByIdAsync(id);
-
-        if (existingProduct == null)
+        if (id <= 0)
         {
-            return NotFound(new { message = "Produto não encontrado." });
+            return BadRequest(new { message = "ID inválido." });
         }
 
-        await _productRepository.DeleteProductAsync(id);
+        try
+        {
+            var existingProduct = await _productRepository.GetProductByIdAsync(id);
 
-        return NoContent();
+            if (existingProduct == null)
+            {
+                return NotFound(new { message = "Produto não encontrado." });
+            }
+
+            await _productRepository.DeleteProductAsync(id);
+
+            return NoContent();
+        }
+        catch
+        {
+            return StatusCode(500, new { message = "Erro ao deletar o produto." });
+        }
     }
 }
+

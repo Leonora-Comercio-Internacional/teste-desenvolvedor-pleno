@@ -5,6 +5,6 @@ namespace Backend.Domain.Interfaces;
 
 public interface IUserRepository
 {
-    Task Register(UserRequest user);
+    Task SignUp(UserRequest user);
     Task<User?> GetUserByUsernameAsync(string username);
 }

@@ -15,8 +15,18 @@ public class UserRepository : IUserRepository
         _connectionString = connectionString;
     }
 
-    public async Task Register(UserRequest user)
+    public async Task SignUp(UserRequest user)
     {
+        if (string.IsNullOrWhiteSpace(user.Username) || user.Username.Length < 3 || user.Username.Length > 20)
+        {
+            throw new ArgumentException("O username deve ter entre 3 e 20 caracteres.");
+        }
+
+        if (string.IsNullOrWhiteSpace(user.Password) || user.Password.Length < 6 || user.Password.Length > 30)
+        {
+            throw new ArgumentException("A senha deve ter entre 6 e 30 caracteres.");
+        }
+
         var query = "INSERT INTO users (username, password) VALUES (@username, @password)";
 
         try
