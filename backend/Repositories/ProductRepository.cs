@@ -164,12 +164,10 @@ public class ProductRepository : IProductRepository
         await using var connection = new MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
-        // Inicia uma transação
         await using var transaction = await connection.BeginTransactionAsync();
 
         try
         {
-            // Insere o produto e obtém o ID gerado
             await using var productCommand = new MySqlCommand(productInsertQuery, connection, transaction);
             productCommand.Parameters.AddWithValue("@name", product.Name);
             productCommand.Parameters.AddWithValue("@description", product.Description);
@@ -178,7 +176,6 @@ public class ProductRepository : IProductRepository
 
             productId = Convert.ToInt32(await productCommand.ExecuteScalarAsync());
 
-            // Insere os fornecedores associados, se existirem
             if (product.SupplierIds != null && product.SupplierIds.Any())
             {
                 foreach (var supplierId in product.SupplierIds)
@@ -190,12 +187,10 @@ public class ProductRepository : IProductRepository
                 }
             }
 
-            // Confirma a transação
             await transaction.CommitAsync();
         }
         catch
         {
-            // Reverte a transação em caso de erro
             await transaction.RollbackAsync();
             throw;
         }
@@ -205,29 +200,84 @@ public class ProductRepository : IProductRepository
 
     public async Task UpdateProductAsync(int id, ProductUpdate product)
     {
-        var query = @"
-            UPDATE products 
-            SET name = @name, price = @price, description = @description, category_id = @category_id 
-            WHERE id = @id AND is_deleted = FALSE";
+        var updateProductQuery = @"
+        UPDATE products 
+        SET name = @name, price = @price, description = @description, category_id = @category_id 
+        WHERE id = @id AND is_deleted = FALSE";
+
+        var getExistingSuppliersQuery = @"
+        SELECT supplier_id 
+        FROM product_suppliers 
+        WHERE product_id = @productId";
+
+        var insertProductSupplierQuery = @"
+        INSERT INTO product_suppliers (product_id, supplier_id) 
+        VALUES (@productId, @supplierId)";
+
+        var deleteProductSupplierQuery = @"
+        DELETE FROM product_suppliers 
+        WHERE product_id = @productId AND supplier_id = @supplierId";
 
         try
         {
             await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
-            await using var command = new MySqlCommand(query, connection);
+            await using var transaction = await connection.BeginTransactionAsync();
 
-            command.Parameters.AddWithValue("@name", product.Name);
-            command.Parameters.AddWithValue("@price", product.Price);
-            command.Parameters.AddWithValue("@description", product.Description);
-            command.Parameters.AddWithValue("@category_id", product.CategoryId);
-            command.Parameters.AddWithValue("@id", id);
+            try
+            {
+                await using var updateProductCommand = new MySqlCommand(updateProductQuery, connection, transaction);
+                updateProductCommand.Parameters.AddWithValue("@name", product.Name);
+                updateProductCommand.Parameters.AddWithValue("@price", product.Price);
+                updateProductCommand.Parameters.AddWithValue("@description", product.Description);
+                updateProductCommand.Parameters.AddWithValue("@category_id", product.CategoryId);
+                updateProductCommand.Parameters.AddWithValue("@id", id);
+                await updateProductCommand.ExecuteNonQueryAsync();
 
-            await command.ExecuteNonQueryAsync();
+                var existingSupplierIds = new HashSet<int>();
+                await using (var getExistingSuppliersCommand = new MySqlCommand(getExistingSuppliersQuery, connection, transaction))
+                {
+                    getExistingSuppliersCommand.Parameters.AddWithValue("@productId", id);
+                    await using var reader = await getExistingSuppliersCommand.ExecuteReaderAsync();
+
+                    while (await reader.ReadAsync())
+                    {
+                        existingSupplierIds.Add(reader.GetInt32("supplier_id"));
+                    }
+                }
+
+                var newSupplierIds = product.SupplierId ?? new List<int>();
+                var suppliersToAdd = newSupplierIds.Except(existingSupplierIds);
+                var suppliersToRemove = existingSupplierIds.Except(newSupplierIds);
+
+                foreach (var supplierId in suppliersToAdd)
+                {
+                    await using var insertCommand = new MySqlCommand(insertProductSupplierQuery, connection, transaction);
+                    insertCommand.Parameters.AddWithValue("@productId", id);
+                    insertCommand.Parameters.AddWithValue("@supplierId", supplierId);
+                    await insertCommand.ExecuteNonQueryAsync();
+                }
+
+                foreach (var supplierId in suppliersToRemove)
+                {
+                    await using var deleteCommand = new MySqlCommand(deleteProductSupplierQuery, connection, transaction);
+                    deleteCommand.Parameters.AddWithValue("@productId", id);
+                    deleteCommand.Parameters.AddWithValue("@supplierId", supplierId);
+                    await deleteCommand.ExecuteNonQueryAsync();
+                }
+
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
-        catch
+        catch (Exception ex)
         {
-            Console.WriteLine("Houve um erro ao atualizar o produto.");
+            Console.WriteLine($"Houve um erro ao atualizar o produto: {ex.Message}");
         }
 
     }
