@@ -1,107 +1,136 @@
 # Teste Técnico: Desenvolvedor Full Stack (C# / React)
 
-![image](https://github.com/user-attachments/assets/b7fde9b9-5285-48b2-85c7-222db008933c)
+## Descrição
 
-Bem-vindo(a) ao teste para a vaga de Desenvolvedor Full Stack Pleno! Aqui você poderá demonstrar suas habilidades técnicas e seu conhecimento no desenvolvimento de aplicações integradas.
-
----
-
-## O Desafio
-
-O objetivo é criar uma aplicação para gestão de produtos. A solução deverá incluir:
-
-1. Uma API RESTful em **C#** para gerenciar o cadastro e operações de produtos.
-2. Uma interface web em **React** que permita interações com a API.
-
-A solução deve refletir boas práticas de desenvolvimento e design.
+Este projeto é uma aplicação para gestão de produtos, desenvolvida como parte de um teste técnico para a vaga de Desenvolvedor Full Stack Pleno. A aplicação inclui uma API RESTful em C# e uma interface web em React.
 
 ---
 
-## Requisitos Obrigatórios
-
+## Tecnologias Utilizadas
 ### Backend
-
-1. **CRUD de Produtos**:
-   - Implementar as operações de criação (POST), leitura (GET - individual e lista), atualização (PUT) e exclusão (DELETE) para produtos.
-   - O **DELETE** deve ser apenas lógico, ou seja, os produtos excluídos não devem ser removidos do banco de dados, mas sim marcados como inativos (ex.: campo `isDeleted`).
-
-2. **Relacionamento entre Tabelas**:
-   - Estruturar as tabelas com os seguintes relacionamentos:
-     - **Categoria do Produto**:
-       - Uma tabela de categorias que contenha campos como `id`, `nome` e `descricao`. Cada produto deve estar associado a uma categoria.
-       - Os dados de categorias devem ser previamente populados na inicialização do banco. Por exemplo: "Eletrônicos", "Móveis", "Alimentos".
-     - **Fornecedor**:
-       - Uma tabela de fornecedores que contenha campos como `id`, `nome`, `cnpj`, `telefone` e `endereco`. Cada produto pode estar associado a um ou mais fornecedores.
-       - Os dados de fornecedores também devem ser previamente populados na inicialização do banco com dados fictícios, mas plausíveis.
-
-3. **Autenticação**:
-   - Adicionar um mecanismo de autenticação básico (JWT, por exemplo) para proteger os endpoints da API.
-
-4. **Banco de Dados**:
-   - Utilize um banco relacional (MySQL, SQL Server, Informix).
+- C#
+- .NET Core / .NET 6+
+- ADO.NET: Para acesso ao banco de dados.
+- MySQL: Banco de dados relacional utilizado.
+- JWT: Para autenticação.
+- Swashbuckle (Swagger): Para documentação da API.
+- DotNetEnv: Para gerenciamento de variáveis de ambiente.
+- BCrypt: Para hashing de senhas.
 
 ### Frontend
+- React: Biblioteca JavaScript para construção da interface.
+- TypeScript: Superset de JavaScript que adiciona tipagem estática.
+- Axios: Cliente HTTP para realizar requisições à API.
+- React Hook Form: Biblioteca para gerenciamento de formulários.
+- Zod: Biblioteca para validações de inputs.
+- React Router DOM: Para roteamento na aplicação.
+- Bootstrap: Framework CSS para estilização.
 
-1. **Listagem de Produtos**:
-   - Exibir os produtos cadastrados em uma tabela responsiva, incluindo informações de categoria e fornecedores.
+---
 
-2. **Cadastro e Edição de Produtos**:
-   - Formulário para criar e editar produtos, com opção de selecionar a categoria e fornecedores.
+## Funcionalidades
 
-3. **Validações**:
-   - Implementar validação básica dos campos no frontend.
+### Backend
+1. CRUD de Produtos:
+   - Criação, leitura, atualização e exclusão lógica de produtos.
+2. Relacionamento entre Tabelas:
+   - Produtos associados a categorias e fornecedores.
+3. Autenticação:
+   - Proteção dos endpoints da API com JWT.
+4. Banco de Dados:
+   - Utilização de MySQL como banco de dados relacional.
 
-4. **Exclusão de Produtos**:
+### Frontend
+1. Listagem de Produtos:
+   - Exibição dos produtos cadastrados em uma tabela responsiva.
+2. Cadastro e Edição de Produtos:
+   - Formulário para criar e editar produtos.
+3. Validações:
+   - Validação básica dos campos no frontend.
+4. Exclusão de Produtos:
    - Possibilidade de excluir um produto da listagem.
 
 ---
 
-## Requisitos Não Obrigatórios (Extras)
+## Como configurar e Executar o Projeto
 
-1. **Documentação**: Documentar a API utilizando Swagger ou similar.
-2. **Testes Automatizados**:
-   - Backend: testes unitários e/ou de integração utilizando xUnit.
-   - Frontend: testes unitários ou de interface com Jest.
-3. **Design**: Melhorar a interface com boas práticas de UX/UI.
-4. **Desempenho**: Implementar cache para melhorar a performance de requisições no backend.
+### Configuração de Portas
+O backend está configurado para executar na porta 5006, conforme especificado no arquivo launchSettings.json. A rota no frontend está direcionada para essa porta. Caso haja a necessidade de alterar a porta do backend, será necessário atualizar a configuração no frontend também.
+
+Para isso, modifique o arquivo axios.tsx localizado na pasta lib do frontend, ajustando a URL base para a nova porta.
+
+### Backend
+
+1. Clone o repositório
+
+```bash
+https://github.com/Thalesmau/teste-desenvolvedor-pleno.git
+```
+
+2. Navegue até a pasta backend
+```bash
+cd teste-desenvolvedor-pleno/backend
+```
+
+3. Renomeie o arquivo .env-example para .env
+```bash
+mv .env-example .env
+```
+
+4. Configure a váriavel de ambiente
+```bash
+DefaultConnection=sua-connection_string
+```
+
+5. Restaure os pacotes Nuget
+```bash
+dotnet restore
+```
+
+6. Inicie a Aplicação
+```bash
+dotnet run
+```
 
 ---
 
-## Requisitos Técnicos
+### Frontend
 
-### Tecnologias Permitidas
+1. Navegue até a pasta frontend
+```bash
+cd teste-desenvolvedor-pleno/frontend
+```
 
-- **Backend**: C#, .NET Core / .NET 6+
-- **Frontend**: React com TypeScript
-- **Banco de Dados**: Relacional (MySQL, SQL Server, Informix)
+2. Instale as dependências
+```bash
+npm install
+```
 
-### Tecnologias Não Permitidas
+3. Inicie a aplicação
+```bash
+npm run dev
+```
 
-- Bancos de dados não relacionais
-- Frameworks de backend que não sejam em C#
-- Bibliotecas que implementem diretamente o CRUD
+5. Restaure os pacotes Nuget
+```bash
+dotnet restore
+```
+
+6. Inicie a Aplicação
+```bash
+dotnet run
+```
 
 ---
 
-## Entrega
+### Decisões de Design
+- Autenticação com JWT: Escolhi usar JWT para garantir a segurança dos endpoints da API. Isso permite que apenas usuários autenticados possam acessar e manipular os dados, aumentando a segurança da aplicação.
+- Criação e População do Banco de Dados: Ao rodar o projeto pela primeira vez, o banco de dados é automaticamente criado e populado com dados iniciais nas tabelas categories e suppliers. Além disso, um usuário padrão é adicionado com as seguintes credenciais:
+   - Username: Grupo Leonora
+   - Senha: leonora
+   - Também é possível adicionar novos usuários conforme necessário.
+- Exclusão Lógica: Foi implementado a exclusão lógica para manter o histórico de produtos no banco de dados. Em vez de remover os registros, eles são marcados como inativos.
+- React Hook Form: Utilizei o React Hook Form para o gerenciamento dos formulários no frontend. Ela biblioteca facilita a manipulação de inputs e validações, e torna o código mais limpo e eficiente.
+- Bootstrap: Escolhi o Bootstrap para agilizar a estilização e garantir que a interface seja responsiva. Isso ajuda a criar uma experiência de usuário maisconsistente e adaptável.
+- Zod: Para a validação de inputs no frontend, usei o Zod. Essa biblioteca garante que os dados inseridos pelos usuários estejam corretos e seguros antes de serem enviados para a API, evitando problemas comuns de validação.
 
-1. **Fork do Repositório**: Faça um fork deste repositório para sua conta do GitHub.
-2. **Branch**: Crie uma branch com o nome `teste/[SEU NOME]` (por exemplo: `teste/joao-silva`).
-3. **Pull Request**: Ao finalizar, faça um pull request com a sua branch.
-4. **Documentação**: Inclua no `README.md` do repositório:
-   - Como configurar e rodar o projeto
-   - Tecnologias utilizadas
-   - Decisões de design
-
----
-
-## Avaliação
-
-### Critérios
-
-- Qualidade do código e organização do projeto
-- Implementação de boas práticas (design patterns, SOLID, etc.)
-- Alinhamento com os requisitos solicitados
-- Documentação clara
-
-Boa sorte! Estamos animados para conhecer seu trabalho.
