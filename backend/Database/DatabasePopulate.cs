@@ -39,9 +39,17 @@ public class DatabasePopulate
                     ('Fornecedor B', '98.765.432/0001-21', '9876-5432', 'Avenida Exemplo, 456', NOW()),
                     ('Fornecedor C', '55.444.333/0001-12', '5544-3321', 'Praça Exemplo, 789', NOW())
                     ON DUPLICATE KEY UPDATE name = name;";
+            
+            var password = BCrypt.Net.BCrypt.HashPassword("leonora");
+
+            var insertUser = $@"
+                    INSERT INTO users (username, password) VALUES
+                    ('Grupo Leonora', '{password}')
+                    ON DUPLICATE KEY UPDATE username = username;";
 
             ExecuteCommand(connection, insertCategories);
             ExecuteCommand(connection, insertSuppliers);
+            ExecuteCommand(connection, insertUser);
 
             Console.WriteLine("Dados iniciais populados com sucesso.");
         }
