@@ -18,20 +18,52 @@ https://github.com/Thalesmau/teste-desenvolvedor-pleno.git
 
 2. Navegue até a pasta backend
 ```bash
-cd backend
+cd teste-desenvolvedor-pleno/backend
 ```
 
-3. Configure a váriavel de ambiente. Na raiz da pasta tem um arquivo .env-example
+3. Renomeie o arquivo .env-example para .env
+```bash
+mv .env-example .env
+```
+
+4. Configure a váriavel de ambiente
 ```bash
 DefaultConnection=sua-connection_string
 ```
 
-4. Restaure os pacotes Nuget.
+5. Restaure os pacotes Nuget
 ```bash
 dotnet restore
 ```
 
-5. Inicie a Aplicação
+6. Inicie a Aplicação
+```bash
+dotnet run
+```
+
+### Frontend
+
+1. Navegue até a pasta frontend
+```bash
+cd teste-desenvolvedor-pleno/frontend
+```
+
+2. Instale as dependências
+```bash
+npm install
+```
+
+3. Inicie a aplicação
+```bash
+npm run dev
+```
+
+5. Restaure os pacotes Nuget
+```bash
+dotnet restore
+```
+
+6. Inicie a Aplicação
 ```bash
 dotnet run
 ```
