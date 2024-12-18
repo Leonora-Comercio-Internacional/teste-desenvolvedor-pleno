@@ -87,13 +87,6 @@ dotnet restore
 dotnet run
 ```
 
-Ao rodar o projeto pela primeira vez, o banco de dados será criado e populado com alguns dados nas tabelas categories e suppliers. Além disso, um usuário será adicionado na tabela users com as seguintes credenciais:
-
-- Username: Grupo Leonora
-- Senha: leonora
-
-Também é possível adicionar novos usuários.
-
 ---
 
 ### Frontend
@@ -122,3 +115,17 @@ dotnet restore
 ```bash
 dotnet run
 ```
+
+---
+
+### Decisões de Design
+- Autenticação com JWT: Escolhi usar JWT para garantir a segurança dos endpoints da API. Isso permite que apenas usuários autenticados possam acessar e manipular os dados, aumentando a segurança da aplicação.
+- Criação e População do Banco de Dados: Ao rodar o projeto pela primeira vez, o banco de dados é automaticamente criado e populado com dados iniciais nas tabelas categories e suppliers. Além disso, um usuário padrão é adicionado com as seguintes credenciais:
+   - Username: Grupo Leonora
+   - Senha: leonora
+   - Também é possível adicionar novos usuários conforme necessário.
+- Exclusão Lógica: Foi implementado a exclusão lógica para manter o histórico de produtos no banco de dados. Em vez de remover os registros, eles são marcados como inativos.
+- React Hook Form: Utilizei o React Hook Form para o gerenciamento dos formulários no frontend. Ela biblioteca facilita a manipulação de inputs e validações, e torna o código mais limpo e eficiente.
+- Bootstrap: Escolhi o Bootstrap para agilizar a estilização e garantir que a interface seja responsiva. Isso ajuda a criar uma experiência de usuário maisconsistente e adaptável.
+- Zod: Para a validação de inputs no frontend, usei o Zod. Essa biblioteca garante que os dados inseridos pelos usuários estejam corretos e seguros antes de serem enviados para a API, evitando problemas comuns de validação.
+
