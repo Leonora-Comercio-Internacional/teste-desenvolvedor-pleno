@@ -11,7 +11,7 @@ export const SignUp = () => {
 
   const onSubmit = async (data: AuthFormData) => {
     try {
-      await api.post("Auth/RegisterUser", data);
+      await api.post("Auth/SignUp", data);
 
       alert("Registrado com sucesso");
 
