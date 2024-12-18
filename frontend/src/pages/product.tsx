@@ -20,9 +20,11 @@ enum Category {
 }
 
 const Supplier = {
-  1: "Fornecedor A",
-  2: "Fornecedor B",
-  3: "Fornecedor C",
+  1: "Comercial Santos LTDA",
+  2: "Distribuidora Nova Era",
+  3: "Alimentos União S.A.",
+  4: "Móveis e Design LTDA",
+  5: "Tech Solutions Inc."
 };
 
 export function Product() {

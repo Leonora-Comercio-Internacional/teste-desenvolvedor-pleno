@@ -1,7 +1,12 @@
 import { useForm } from "react-hook-form";
+
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import type { ProductRequest } from "../types/product";
+
 import { api } from "../lib/axios";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { productSchema, ProductFormData } from "../schemas/validationSchemas";
 
 interface ModalAddProductProps {
   isModalOpen: boolean;
@@ -9,9 +14,11 @@ interface ModalAddProductProps {
 }
 
 export function ModalAddProduct({ isModalOpen, setIsModalOpen }: ModalAddProductProps) {
-  const { handleSubmit, register, formState } = useForm<ProductRequest>()
+  const { handleSubmit, register, formState: { errors } } = useForm<ProductFormData>({
+    resolver: zodResolver(productSchema),
+  })
 
-  const onSubmit = async (data: ProductRequest) => {
+  const onSubmit = async (data: ProductFormData) => {
     try {
       if (data.supplierIds) {
         data.supplierIds = [parseInt(data.supplierIds.toString())];
@@ -22,7 +29,7 @@ export function ModalAddProduct({ isModalOpen, setIsModalOpen }: ModalAddProduct
       }
 
       if (data.price) {
-        data.price = parseFloat(data.price.toString());
+        data.price = parseFloat(data.price.toString().replace(',', '.'));
       }
 
       await api.post('Product/AddProduct', data)
@@ -39,36 +46,48 @@ export function ModalAddProduct({ isModalOpen, setIsModalOpen }: ModalAddProduct
     <Modal isOpen={isModalOpen}>
       <ModalHeader>Adicionar Produto</ModalHeader>
       <ModalBody>
-        <form id="productForm" onSubmit={handleSubmit(onSubmit)} className="form-group">
-          <label>Nome</label>
-          <input {...register('name')} type="text" className="form-control" />
-          {formState.errors.name && <span>{formState.errors.name.message}</span>}
-          <label>Preço</label>
-          <input {...register('price')} type="number" className="form-control" />
-          {formState.errors.price && <span>{formState.errors.price.message}</span>}
+        <form id="productForm" onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-group">
+            <label>Nome</label>
+            <input {...register('name')} type="text" className="form-control" />
+            {errors.name && <span className="text-danger">{errors.name.message}</span>}
+          </div>
 
-          <label>Descrição</label>
-          <input {...register('description')} type="text" className="form-control" />
-          {formState.errors.description && <span>{formState.errors.description.message}</span>}
+          <div className="form-group">
+            <label>Preço</label>
+            <input {...register('price')} type="text" className="form-control" />
+            {errors.price && <span className="text-danger">{errors.price.message}</span>}
+          </div>
 
-          <label>Categoria</label>
-          <select {...register('categoryId')} className="form-control">
-            <option value="1">Eletrônicos</option>
-            <option value="2">Móveis</option>
-            <option value="3">Alimentos</option>
-            <option value="4">Roupas</option>
-            <option value="5">Eletrodomésticos</option>
-          </select>
-          {formState.errors.categoryId && <span>{formState.errors.categoryId.message}</span>}
+          <div className="form-group">
+            <label>Descrição</label>
+            <input {...register('description')} type="text" className="form-control" />
+            {errors.description && <span className="text-danger">{errors.description.message}</span>}
+          </div>
 
-          <label>Fornecedores</label>
-          <select {...register('supplierIds')} className="form-control">
-            <option value=""></option>
-            <option value="1">Fornecedor A</option>
-            <option value="2">Fornecedor B</option>
-            <option value="3">Fornecedor C</option>
-          </select>
+          <div className="form-group">
+            <label>Categoria</label>
+            <select {...register('categoryId')} className="form-control" aria-placeholder="Selecione uma Categoria">
+              <option value=""></option>
+              <option value="1">Eletrônicos</option>
+              <option value="2">Móveis</option>
+              <option value="3">Alimentos</option>
+              <option value="4">Roupas</option>
+              <option value="5">Eletrodomésticos</option>
+            </select>
+            {errors.categoryId && <span className="text-danger">{errors.categoryId.message}</span>}
+          </div>
 
+          <div className="form-group">
+            <label>Fornecedores</label>
+            <select {...register('supplierIds')} className="form-control" aria-placeholder="Selecione uma Fornecedor">
+              <option value=""></option>
+              <option value="1">Fornecedor A</option>
+              <option value="2">Fornecedor B</option>
+              <option value="3">Fornecedor C</option>
+            </select>
+            {errors.supplierIds && <span className="text-danger">{errors.supplierIds.message}</span>}
+          </div>
         </form>
       </ModalBody>
       <ModalFooter>

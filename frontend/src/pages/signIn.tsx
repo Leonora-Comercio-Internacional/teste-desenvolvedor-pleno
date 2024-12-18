@@ -2,18 +2,21 @@ import { useForm } from "react-hook-form";
 import imgLogo from "../assets/logo.png"
 import { api } from "../lib/axios";
 import { useNavigate } from "react-router-dom";
-
-interface SignInFormData {
-  username: string;
-  password: string;
-}
+import { zodResolver } from "@hookform/resolvers/zod";
+import { authSchema, AuthFormData } from "../schemas/validationSchemas";
 
 export function SignIn() {
   const navigate = useNavigate();
 
-  const { handleSubmit, register, formState } = useForm<SignInFormData>();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<AuthFormData>({
+    resolver: zodResolver(authSchema),
+  });
 
-  const onSubmit = async (data: SignInFormData) => {
+  const onSubmit = async (data: AuthFormData) => {
     try {
       const response = await api.post("Auth/SignIn", data);
       const { token } = response.data;
@@ -33,7 +36,7 @@ export function SignIn() {
       </header>
       <main className="container d-flex justify-content-center align-items-center flex-grow-1">
         <div className="card bg-light text-dark p-4" style={{ maxWidth: "400px" }}>
-          <h2 className="text-center mb-4">Grupo Leonora</h2>
+          <h2 className="text-center mb-4">Acesso</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">
               <label htmlFor="username" className="form-label">
@@ -41,28 +44,30 @@ export function SignIn() {
               </label>
               <input
                 type="text"
-                className={`form-control ${formState.errors.username ? "is-invalid" : ""}`}
+                className={`form-control ${errors.username ? "is-invalid" : ""}`}
                 id="username"
-                {...register("username", { required: "Username is required" })}
+                {...register("username")}
               />
-              {formState.errors.username && (
-                <div className="invalid-feedback">{formState.errors.username.message}</div>
+              {errors.username && (
+                <div className="invalid-feedback">{errors.username.message}</div>
               )}
             </div>
+
             <div className="mb-3">
               <label htmlFor="password" className="form-label">
                 Senha
               </label>
               <input
                 type="password"
-                className={`form-control ${formState.errors.password ? "is-invalid" : ""}`}
+                className={`form-control ${errors.password ? "is-invalid" : ""}`}
                 id="password"
-                {...register("password", { required: "Password is required" })}
+                {...register("password")}
               />
-              {formState.errors.password && (
-                <div className="invalid-feedback">{formState.errors.password.message}</div>
+              {errors.password && (
+                <div className="invalid-feedback">{errors.password.message}</div>
               )}
             </div>
+
             <button type="submit" className="btn btn-primary w-100 mb-3">
               Entrar
             </button>

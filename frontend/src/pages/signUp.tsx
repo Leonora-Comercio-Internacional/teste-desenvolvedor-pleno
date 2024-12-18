@@ -2,18 +2,14 @@ import { useForm } from "react-hook-form";
 import imgLogo from "../assets/logo.png"
 import { api } from "../lib/axios";
 import { useNavigate } from "react-router-dom";
-
-interface SignUpFormData {
-  username: string;
-  password: string;
-}
+import { AuthFormData } from "../schemas/validationSchemas";
 
 export const SignUp = () => {
   const navigate = useNavigate();
 
-  const { handleSubmit, register, formState } = useForm<SignUpFormData>();
+  const { handleSubmit, register, formState: { errors } } = useForm<AuthFormData>();
 
-  const onSubmit = async (data: SignUpFormData) => {
+  const onSubmit = async (data: AuthFormData) => {
     try {
       await api.post("Auth/RegisterUser", data);
 
@@ -32,7 +28,7 @@ export const SignUp = () => {
       </header>
       <main className="container d-flex justify-content-center align-items-center flex-grow-1">
         <div className="card bg-light text-dark p-4" style={{ maxWidth: "400px" }}>
-          <h2 className="text-center mb-4">Grupo Leonora</h2>
+          <h2 className="text-center mb-4">Cadastro</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">
               <label htmlFor="username" className="form-label">
@@ -40,28 +36,30 @@ export const SignUp = () => {
               </label>
               <input
                 type="text"
-                className={`form-control ${formState.errors.username ? "is-invalid" : ""}`}
+                className={`form-control ${errors.username ? "is-invalid" : ""}`}
                 id="username"
-                {...register("username", { required: "Username is required" })}
+                {...register("username")}
               />
-              {formState.errors.username && (
-                <div className="invalid-feedback">{formState.errors.username.message}</div>
+              {errors.username && (
+                <div className="invalid-feedback">{errors.username.message}</div>
               )}
             </div>
+
             <div className="mb-3">
               <label htmlFor="password" className="form-label">
                 Senha
               </label>
               <input
                 type="password"
-                className={`form-control ${formState.errors.password ? "is-invalid" : ""}`}
+                className={`form-control ${errors.password ? "is-invalid" : ""}`}
                 id="password"
-                {...register("password", { required: "Password is required" })}
+                {...register("password")}
               />
-              {formState.errors.password && (
-                <div className="invalid-feedback">{formState.errors.password.message}</div>
+              {errors.password && (
+                <div className="invalid-feedback">{errors.password.message}</div>
               )}
             </div>
+
             <button type="submit" className="btn btn-primary w-100 mb-3">
               Criar Conta
             </button>
